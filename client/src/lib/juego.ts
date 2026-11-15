@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { DatosPorTipo, TipoPregunta } from "../juego/preguntas";
-import type { ColorAvatar } from "./socket";
+import { desfaseReloj, type ColorAvatar } from "./socket";
 import type { IdPoder } from "../juego/poderes";
 
 // Pantallas que manda el servidor (server/src/juego/motor.ts)
@@ -18,7 +18,7 @@ export interface VistaPreguntaAnfitrion {
   numElementos?: number;
 }
 
-export interface PantallaPreguntaAnfitrion {
+export interface PantallaPreguntaAnfitrion extends TiemposPregunta {
   fase: "pregunta";
   indice: number;
   total: number;
@@ -147,7 +147,7 @@ export interface EventoFeed {
 }
 
 export type PantallaJugador =
-  | { fase: "pregunta"; indice: number; total: number; pregunta: VistaPreguntaJugador; restanteMs: number; puntos: number; poderes: BloquePoderes | null }
+  | ({ fase: "pregunta"; indice: number; total: number; pregunta: VistaPreguntaJugador; puntos: number; poderes: BloquePoderes | null } & TiemposPregunta)
   | { fase: "enviada"; indice: number; total: number; puntos: number; poderes: BloquePoderes | null }
   | {
       fase: "resultado";
@@ -167,19 +167,40 @@ export type PantallaJugador =
     }
   | { fase: "podio"; puesto: number; jugadores: number; puntos: number; aciertos: number; total: number };
 
-/** Cuenta atrás local a partir de los ms que mandó el servidor */
-export function useCuentaAtras(restanteMs: number, clave: unknown) {
-  const [fin, setFin] = useState(() => Date.now() + restanteMs);
+/** Tiempos de una pregunta tal como los manda el servidor */
+export interface TiemposPregunta {
+  /** Horas del servidor (ms) */
+  inicioEn: number;
+  finEn: number;
+  /** Lo mismo, relativo al momento del envío (por si aún no se midió el desfase) */
+  empiezaEnMs: number;
+  restanteMs: number;
+}
+
+/**
+ * Cuenta atrás de la pregunta.
+ * - previa: segundos del «¡Prepárate!» (0 cuando ya empezó)
+ * - restante: segundos para responder (no baja durante la previa)
+ * Usa la hora del servidor si ya se midió el desfase; si no, cuenta desde que llegó el aviso.
+ */
+export function useReloj(t: TiemposPregunta, clave: unknown) {
+  const { inicioLocal, finLocal } = useMemo(() => {
+    const d = desfaseReloj();
+    const recibido = Date.now();
+    return d !== null
+      ? { inicioLocal: t.inicioEn - d, finLocal: t.finEn - d }
+      : { inicioLocal: recibido + t.empiezaEnMs, finLocal: recibido + t.restanteMs };
+    // Se recalcula con cada pregunta nueva o si cambia el cierre (+5 s de Tiempo extra)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clave, t.inicioEn, t.finEn]);
   const [ahora, setAhora] = useState(Date.now());
   useEffect(() => {
-    setFin(Date.now() + restanteMs);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clave]);
-  useEffect(() => {
-    const t = setInterval(() => setAhora(Date.now()), 250);
-    return () => clearInterval(t);
+    const id = setInterval(() => setAhora(Date.now()), 200);
+    return () => clearInterval(id);
   }, []);
-  return Math.max(0, Math.ceil((fin - ahora) / 1000));
+  const previa = Math.max(0, Math.ceil((inicioLocal - ahora) / 1000));
+  const restante = Math.max(0, Math.ceil((finLocal - Math.max(ahora, inicioLocal)) / 1000));
+  return { previa, restante };
 }
 
 /** 4280 → "4 280" (como en los diseños) */

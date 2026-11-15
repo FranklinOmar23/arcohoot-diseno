@@ -226,3 +226,33 @@
   .rank__puntos { min-width: 0; font-size: 24px; }
   .rank__apodo { font-size: 22px; }
 }
+
+/* «¡Prepárate!» sobre la pantalla grande, antes de que corra el tiempo */
+.juego__centro { position: relative; }
+.juego__previa {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  background: color-mix(in srgb, var(--crema) 88%, transparent);
+  border-radius: 24px;
+}
+.juego__previa-titulo { font-weight: 700; font-size: var(--fs-display); line-height: 1; }
+.juego__previa-num {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--sol);
+  color: var(--sobre-claro);
+  border: var(--borde-grueso);
+  box-shadow: var(--sombra-tarjeta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 88px;
+  line-height: 1;
+}

@@ -377,7 +377,7 @@ export function Jugar() {
           indice={pantalla.indice}
           total={pantalla.total}
           puntos={pantalla.puntos}
-          restanteMs={pantalla.restanteMs}
+          tiempos={pantalla}
           pregunta={pantalla.pregunta}
           enviando={enviando}
           error={errorResp}

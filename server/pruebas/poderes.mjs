@@ -7,6 +7,8 @@ const B = process.env.ARCOHOOT_URL ?? "http://localhost:5173";
 let fallos = 0;
 const ok = (c, m) => { if (!c) fallos++; console.log(`${c ? "✔" : "✘"} ${m}`); };
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+// Cada pregunta empieza tras 3 s de «¡Prepárate!»: espera a que arranque antes de responder
+const aEmpezar = async (p) => { const ms = (p?.inicioEn ?? 0) - Date.now(); if (ms > 0) await esperar(ms + 80); };
 
 // Google sin configurar: el botón no aparece y el endpoint lo dice
 const cfg = await (await fetch(`${B}/api/auth/config`)).json();
@@ -46,6 +48,7 @@ await esperar(200);
 ok(ph.fase === "pregunta" && Array.isArray(ph.feed), "pregunta 1 con panel de poderes en la pantalla grande");
 ok(Ana.p.poderes && Ana.p.poderes.inventario.length === 0 && Ana.p.poderes.rivales.length === 3, "cada jugador ve su inventario vacío y 3 rivales");
 
+await aEmpezar(Ana.p);
 // ── Pregunta 1 (Quiz: la correcta es la 0) ──
 await dar(Ana, "doble", "cincuenta", "congelar");
 ok(!(await pedir(Ana.s, "prueba:dar-poder", { poder: "inventado" })).ok, "un poder inexistente se rechaza");
@@ -103,6 +106,7 @@ ok(Ana.p.dobles && Ana.p.ganados > Luis.p.ganados * 1.5, `x2 · Ana gana ${Ana.p
 await pedir(host, "anfitrion:siguiente", { pin });
 await pedir(host, "anfitrion:siguiente", { pin });
 await esperar(150);
+await aEmpezar(Ana.p);
 const antesAna = Ana.p.puntos;
 const antesMarta = Marta.p.puntos;
 u = await usar(Marta, "robo", Ana);
@@ -118,6 +122,7 @@ await esperar(150);
 await pedir(host, "anfitrion:siguiente", { pin });
 await pedir(host, "anfitrion:siguiente", { pin });
 await esperar(150);
+await aEmpezar(Ana.p);
 ok(!(await usar(Pedro, "revolver", Ana)).ok, "Revolver no se puede usar en Respuesta corta");
 await pedir(Ana.s, "jugador:responder", { indice: 2, valor: "911" });
 for (const j of [Luis, Marta, Pedro]) await pedir(j.s, "jugador:responder", { indice: 2, valor: "no sé" });

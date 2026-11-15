@@ -9,6 +9,8 @@ const B = process.env.ARCOHOOT_URL ?? "http://localhost:5173";
 let fallos = 0;
 const ok = (c, m) => { if (!c) fallos++; console.log(`${c ? "✔" : "✘"} ${m}`); };
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+// Cada pregunta empieza tras 3 s de «¡Prepárate!»: espera a que arranque antes de responder
+const aEmpezar = async (p) => { const ms = (p?.inicioEn ?? 0) - Date.now(); if (ms > 0) await esperar(ms + 80); };
 
 const r = await fetch(`${B}/api/auth/entrar`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ correo: "demo@arcohoot.app", clave: "arcohoot123" }) });
 const cookie = r.headers.get("set-cookie").split(";")[0];
@@ -59,6 +61,11 @@ const plan = [
 for (let q = 0; q < plan.length; q++) {
   await esperar(150);
   ok(pantallaHost.fase === "pregunta" && pantallaHost.indice === q, `pregunta ${q + 1} (${pantallaHost.pregunta.tipo}) en pantalla`);
+  if (q === 0) {
+    const temprano = await pedir(ana.s, "jugador:responder", { indice: 0, valor: 0 });
+    ok(!temprano.ok, "  responder durante «¡Prepárate!» se rechaza");
+  }
+  await aEmpezar(pantallaHost);
   for (let k = 0; k < 3; k++) {
     let v = plan[q][k];
     if (v === null) continue;

@@ -27,6 +27,8 @@ import type { Jugador, Juego, Sala } from "./salas.js";
 
 /** Margen para respuestas que llegan justo al final por la latencia de la red */
 const GRACIA_MS = 600;
+/** «¡Prepárate!» antes de cada pregunta: absorbe el retraso con que llega el aviso a cada celular */
+export const PREVIA_MS = 3000;
 const MAX_FEED = 6;
 
 export interface Emisor {
@@ -99,7 +101,8 @@ function lanzarPregunta(sala: Sala, emisor: Emisor, indice: number) {
   juego.respuestas = new Map();
   juego.efectos = new Map();
   juego.duracionMs = p.tiempo * 1000;
-  juego.inicio = Date.now();
+  // El reloj empieza tras la cuenta 3-2-1: así todos arrancan a la vez aunque a alguien le llegue tarde
+  juego.inicio = Date.now() + PREVIA_MS;
   juego.rankingAntes = ordenados(sala).map((j) => j.id);
   juego.orden = p.tipo === "puzzle" ? mezcla((p.datos as { elementos: string[] }).elementos.length, juego.inicio) : [];
   juego.pantallaJugador = new Map();
@@ -124,6 +127,15 @@ function lanzarPregunta(sala: Sala, emisor: Emisor, indice: number) {
   emitirTodo(sala, emisor);
 }
 
+/**
+ * Tiempos de la pregunta. inicioEn / finEn son horas del servidor (el celular las convierte con su
+ * diferencia de reloj medida al conectar); empiezaEnMs / restanteMs sirven si aún no la midió.
+ */
+function reloj(inicio: number, fin: number) {
+  const ahora = Date.now();
+  return { inicioEn: inicio, finEn: fin, empiezaEnMs: Math.max(0, inicio - ahora), restanteMs: Math.max(0, fin - ahora) };
+}
+
 /** Pantalla actual del anfitrión (se recalcula en "pregunta" por el reloj) */
 export function pantallaAnfitrion(sala: Sala): Record<string, unknown> | null {
   const juego = sala.juego;
@@ -136,7 +148,7 @@ export function pantallaAnfitrion(sala: Sala): Record<string, unknown> | null {
     total: juego.preguntas.length,
     modo: sala.modo,
     pregunta: vistaAnfitrion(p),
-    restanteMs: Math.max(0, juego.inicio + juego.duracionMs - Date.now()),
+    ...reloj(juego.inicio, juego.inicio + juego.duracionMs),
     respondieron: juego.respuestas.size,
     conectados: conectados(sala),
     feed: conPoderes(sala) ? juego.feed.slice(0, MAX_FEED).map((f) => ({ ...f, haceMs: Date.now() - f.en })) : [],
@@ -180,7 +192,7 @@ export function pantallaJugador(sala: Sala, j: Jugador): Record<string, unknown>
       indice: juego.indice,
       total: juego.preguntas.length,
       pregunta: vistaJugador(p, juego.orden),
-      restanteMs: Math.max(0, juego.inicio + juego.duracionMs + extra - Date.now()),
+      ...reloj(juego.inicio, juego.inicio + juego.duracionMs + extra),
       puntos: j.puntos,
       poderes,
     };
@@ -208,6 +220,7 @@ export function responder(sala: Sala, emisor: Emisor, j: Jugador, indice: unknow
   if (juego.respuestas.has(j.id)) return { ok: false, error: "Ya respondiste." };
   const e = efectos(juego, j);
   const ahora = Date.now();
+  if (ahora < juego.inicio) return { ok: false, error: "¡Espera! La pregunta aún no empieza." };
   if (e.congeladoHasta > ahora) return { ok: false, error: "¡Estás congelado! Espera un momento." };
   const duracion = juego.duracionMs + e.extraMs;
   const ms = ahora - juego.inicio;
@@ -279,8 +292,10 @@ function aplicarPoder(
     }
     const et = efectos(juego, t);
     let robados = 0;
-    if (poder === "congelar") et.congeladoHasta = ahora + CONGELAR_MS;
-    if (poder === "niebla") et.nieblaHasta = ahora + NIEBLA_MS;
+    // Durante el «¡Prepárate!» el efecto cuenta desde que empieza la pregunta
+    const desde = Math.max(ahora, juego.inicio);
+    if (poder === "congelar") et.congeladoHasta = desde + CONGELAR_MS;
+    if (poder === "niebla") et.nieblaHasta = desde + NIEBLA_MS;
     if (poder === "revolver") et.orden = ordenRevuelto(p.tipo === "verdadero_falso" ? 2 : (p.datos as { opciones: unknown[] }).opciones.length);
     if (poder === "robo") {
       robados = Math.floor(t.puntos * ROBO_FRACCION);

@@ -8,6 +8,7 @@ import { Lanzar } from "./paginas/lanzar/Lanzar";
 import { Sala } from "./paginas/anfitrion/Sala";
 import { Jugar } from "./paginas/jugar/Jugar";
 import { SistemaDiseno } from "./paginas/SistemaDiseno";
+import { AvisoConexion } from "./componentes/AvisoConexion";
 
 function Cargando() {
   return (
@@ -41,8 +42,8 @@ export function App() {
       <Route path="/" element={<ConSesion><Inicio /></ConSesion>} />
       <Route path="/editor/:id" element={<ConSesion><Editor /></ConSesion>} />
       <Route path="/lanzar/:id" element={<ConSesion><Lanzar /></ConSesion>} />
-      <Route path="/anfitrion/:pin" element={<ConSesion><Sala /></ConSesion>} />
-      <Route path="/jugar" element={<Jugar />} />
+      <Route path="/anfitrion/:pin" element={<ConSesion><Sala /><AvisoConexion /></ConSesion>} />
+      <Route path="/jugar" element={<><Jugar /><AvisoConexion /></>} />
       <Route path="/sistema" element={<SistemaDiseno />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

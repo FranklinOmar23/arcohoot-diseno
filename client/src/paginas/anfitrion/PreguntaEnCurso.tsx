@@ -1,7 +1,7 @@
 import { Boton, Chip, Cronometro, Forma, FORMAS, Logo, MedallonPoder } from "../../componentes";
 import "../jugar/Poderes.css";
 import { infoTipo } from "../../juego/preguntas";
-import { useCuentaAtras, type PantallaPreguntaAnfitrion } from "../../lib/juego";
+import { useReloj, type PantallaPreguntaAnfitrion } from "../../lib/juego";
 
 interface Props {
   pantalla: PantallaPreguntaAnfitrion;
@@ -18,7 +18,7 @@ const AVISO: Record<string, string> = {
 /** H5 · Pregunta en curso (pantalla grande) */
 export function PreguntaEnCurso({ pantalla: s, onSaltar }: Props) {
   const p = s.pregunta;
-  const restante = useCuentaAtras(s.restanteMs, s.indice);
+  const { previa, restante } = useReloj(s, s.indice);
   const conOpciones = p.tipo === "quiz" || p.tipo === "verdadero_falso";
   const opciones = p.tipo === "verdadero_falso" ? ["Verdadero", "Falso"] : (p.opciones ?? []);
   const formas = p.tipo === "verdadero_falso" ? (["circulo", "rombo"] as const) : FORMAS;
@@ -43,6 +43,14 @@ export function PreguntaEnCurso({ pantalla: s, onSaltar }: Props) {
       </div>
 
       <div className="juego__centro">
+        {previa > 0 && (
+          <div className="juego__previa" role="timer" aria-live="assertive" aria-label={`Empieza en ${previa}`}>
+            <span className="f juego__previa-titulo">¡Prepárate!</span>
+            <span key={previa} className="f pop juego__previa-num">
+              {previa}
+            </span>
+          </div>
+        )}
         <Cronometro restante={restante} total={p.tiempo} />
         {p.imagen ? (
           <div className="juego__imagen">

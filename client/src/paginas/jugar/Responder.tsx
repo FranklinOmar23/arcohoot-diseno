@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type PointerEvent as PE } from "react";
 import { Boton, Chip, Forma, FORMAS, Icono } from "../../componentes";
 import type { NombreForma } from "../../componentes/Forma";
 import { infoTipo, nombreCortoTipo } from "../../juego/preguntas";
-import { formatoPuntos, useCuentaAtras, type BloquePoderes, type VistaPreguntaJugador } from "../../lib/juego";
+import { formatoPuntos, useReloj, type BloquePoderes, type TiemposPregunta, type VistaPreguntaJugador } from "../../lib/juego";
 import { PODERES, type IdPoder } from "../../juego/poderes";
 import { BannerPoder, BarraPoderes, Congelado, ElegirObjetivo, Niebla, useRestante } from "./Poderes";
 
@@ -10,7 +10,7 @@ interface Props {
   indice: number;
   total: number;
   puntos: number;
-  restanteMs: number;
+  tiempos: TiemposPregunta;
   pregunta: VistaPreguntaJugador;
   enviando: boolean;
   error: string;
@@ -353,11 +353,11 @@ export function ControlPoderes({ poderes, onPoder, soloAtaques = false, puntos }
 }
 
 /** J4–J9 · Responder desde el celular (P1, P4–P9 en modo con poderes) */
-export function Responder({ indice, total, puntos, restanteMs, pregunta: p, enviando, error, onResponder, poderes, onPoder }: Props & PropsPoderes) {
+export function Responder({ indice, total, puntos, tiempos, pregunta: p, enviando, error, onResponder, poderes, onPoder }: Props & PropsPoderes) {
   const ef = poderes?.efectos;
-  const restante = useCuentaAtras(restanteMs, `${indice}-${ef?.extraMs ?? 0}`);
+  const { previa, restante } = useReloj(tiempos, indice);
   const congelado = useRestante(ef?.congeladoMs ?? 0, ef?.aviso?.en ?? 0) > 0;
-  const bloqueado = enviando || restante <= 0 || congelado;
+  const bloqueado = enviando || previa > 0 || restante <= 0 || congelado;
   // Vibración corta al llegar la pregunta (si el celular lo permite)
   useEffect(() => {
     navigator.vibrate?.(30);
@@ -398,12 +398,20 @@ export function Responder({ indice, total, puntos, restanteMs, pregunta: p, envi
           {error}
         </p>
       )}
-      {p.tipo === "quiz" && <Quiz p={p} onResponder={onResponder} bloqueado={bloqueado} ef={efBotones} />}
-      {p.tipo === "verdadero_falso" && <VerdaderoFalso onResponder={onResponder} bloqueado={bloqueado} ef={efBotones} />}
-      {p.tipo === "respuesta_corta" && <Corta onResponder={onResponder} bloqueado={bloqueado} />}
-      {p.tipo === "deslizante" && <Deslizante p={p} onResponder={onResponder} bloqueado={bloqueado} />}
-      {p.tipo === "pin" && <Pin p={p} onResponder={onResponder} bloqueado={bloqueado} />}
-      {p.tipo === "puzzle" && <Puzzle p={p} onResponder={onResponder} bloqueado={bloqueado} />}
+      {previa > 0 && (
+        <div className="resp__previa" role="timer" aria-live="assertive" aria-label={`Empieza en ${previa}`}>
+          <span className="f resp__previa-titulo">¡Prepárate!</span>
+          <span key={previa} className="f pop resp__previa-num">
+            {previa}
+          </span>
+        </div>
+      )}
+      {previa === 0 && p.tipo === "quiz" && <Quiz p={p} onResponder={onResponder} bloqueado={bloqueado} ef={efBotones} />}
+      {previa === 0 && p.tipo === "verdadero_falso" && <VerdaderoFalso onResponder={onResponder} bloqueado={bloqueado} ef={efBotones} />}
+      {previa === 0 && p.tipo === "respuesta_corta" && <Corta onResponder={onResponder} bloqueado={bloqueado} />}
+      {previa === 0 && p.tipo === "deslizante" && <Deslizante p={p} onResponder={onResponder} bloqueado={bloqueado} />}
+      {previa === 0 && p.tipo === "pin" && <Pin p={p} onResponder={onResponder} bloqueado={bloqueado} />}
+      {previa === 0 && p.tipo === "puzzle" && <Puzzle p={p} onResponder={onResponder} bloqueado={bloqueado} />}
       {p.tipo !== "quiz" && p.tipo !== "verdadero_falso" && <Niebla ms={efBotones.nieblaMs} clave={efBotones.clave} />}
       <ControlPoderes poderes={poderes} onPoder={onPoder} puntos={puntos} />
       {ef && <Congelado ms={ef.congeladoMs} de={ef.aviso?.tipo === "congelar" ? ef.aviso.de : undefined} clave={ef.aviso?.en ?? 0} />}

@@ -165,3 +165,22 @@
 }
 .fb__correcta-texto { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 22px; overflow-wrap: anywhere; }
 .fb__medalla { font-size: 96px; line-height: 1; }
+
+/* «¡Prepárate!» antes de cada pregunta */
+.resp__previa { flex: 1; min-height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+.resp__previa-titulo { font-weight: 700; font-size: var(--fs-titulo); }
+.resp__previa-num {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: var(--sol);
+  color: var(--sobre-claro);
+  border: var(--borde-grueso);
+  box-shadow: var(--sombra-tarjeta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 1;
+}

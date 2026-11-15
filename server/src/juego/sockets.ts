@@ -102,6 +102,10 @@ export function crearServidorJuego(http: HttpServer) {
       return sala && sala.anfitrionId === usuario.id ? sala : null;
     }
 
+    // Hora del servidor: cada pantalla mide su diferencia de reloj para que la cuenta atrás
+    // sea la misma en todos los celulares aunque los avisos lleguen con retraso
+    on("reloj", (_datos, ack) => ackSeguro(ack)({ ahora: Date.now() }));
+
     on("anfitrion:abrir", async ({ pin } = {}, ack) => {
       const responder = ackSeguro(ack);
       const sala = await salaDelAnfitrion(pin);
