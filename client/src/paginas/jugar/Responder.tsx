@@ -19,7 +19,7 @@ interface Props {
 
 const INSTRUCCION: Record<string, string> = {
   quiz: "Elige una respuesta",
-  verdadero_falso: "Mira la pantalla grande",
+  verdadero_falso: "Elige verdadero o falso",
   respuesta_corta: "Escribe tu respuesta",
   deslizante: "Arrastra hasta tu respuesta",
   pin: "Toca la imagen para poner tu pin",
@@ -110,12 +110,19 @@ function VerdaderoFalso({ onResponder, bloqueado, ef }: { onResponder: (v: unkno
   );
 }
 
-function Enunciado({ texto }: { texto: string }) {
-  return <p className="f resp__enunciado">{texto}</p>;
+/** La pregunta en el celular: enunciado y, si tiene, la imagen (en "pin" la imagen es el lienzo) */
+function TarjetaPregunta({ p }: { p: VistaPreguntaJugador }) {
+  const imagen = p.tipo !== "pin" ? p.imagen : null;
+  return (
+    <div className="ah-card resp__tarjeta">
+      {imagen && <img className="resp__imagen" src={imagen} alt="" />}
+      <h1 className="f resp__enunciado">{p.enunciado}</h1>
+    </div>
+  );
 }
 
 // ── J6 · Respuesta corta ──
-function Corta({ p, onResponder, bloqueado }: { p: VistaPreguntaJugador; onResponder: (v: unknown) => void; bloqueado: boolean }) {
+function Corta({ onResponder, bloqueado }: { onResponder: (v: unknown) => void; bloqueado: boolean }) {
   const [t, setT] = useState("");
   return (
     <form
@@ -125,9 +132,6 @@ function Corta({ p, onResponder, bloqueado }: { p: VistaPreguntaJugador; onRespo
         if (t.trim()) onResponder(t.trim());
       }}
     >
-      <div className="ah-card resp__tarjeta">
-        <Enunciado texto={p.enunciado} />
-      </div>
       <div className="resp__campo">
         <label className="lbl" htmlFor="corta" style={{ color: "var(--tinta)" }}>
           Tu respuesta
@@ -167,9 +171,6 @@ function Deslizante({ p, onResponder, bloqueado }: { p: VistaPreguntaJugador; on
   const u = p.unidad ?? "";
   return (
     <>
-      <div className="ah-card resp__tarjeta">
-        <Enunciado texto={p.enunciado} />
-      </div>
       <div className="resp__deslizante">
         <output htmlFor="rng" className="f resp__valor" aria-live="polite">
           {Math.round(v * 1000) / 1000}
@@ -211,7 +212,6 @@ function Pin({ p, onResponder, bloqueado }: { p: VistaPreguntaJugador; onRespond
   }
   return (
     <>
-      <Enunciado texto={p.enunciado} />
       <div className="resp__pin-marco">
         <div className="resp__pin-lienzo" onPointerDown={tocar} role="application" aria-label="Imagen: toca para poner tu pin">
           {p.imagen && <img src={p.imagen} alt="" draggable={false} />}
@@ -270,7 +270,6 @@ function Puzzle({ p, onResponder, bloqueado }: { p: VistaPreguntaJugador; onResp
 
   return (
     <>
-      <Enunciado texto={p.enunciado} />
       <div className="lbl resp__puzzle-ejes">
         <span>▲ Primero</span>
         <span>Último ▼</span>
@@ -393,6 +392,7 @@ export function Responder({ indice, total, puntos, restanteMs, pregunta: p, envi
         {p.puntosDobles && <Chip color="sol">x2 ⚡</Chip>}
       </p>
       {ef?.aviso && <BannerPoder aviso={ef.aviso} />}
+      <TarjetaPregunta p={p} />
       {error && (
         <p className="jugar__error" role="alert">
           {error}
@@ -400,7 +400,7 @@ export function Responder({ indice, total, puntos, restanteMs, pregunta: p, envi
       )}
       {p.tipo === "quiz" && <Quiz p={p} onResponder={onResponder} bloqueado={bloqueado} ef={efBotones} />}
       {p.tipo === "verdadero_falso" && <VerdaderoFalso onResponder={onResponder} bloqueado={bloqueado} ef={efBotones} />}
-      {p.tipo === "respuesta_corta" && <Corta p={p} onResponder={onResponder} bloqueado={bloqueado} />}
+      {p.tipo === "respuesta_corta" && <Corta onResponder={onResponder} bloqueado={bloqueado} />}
       {p.tipo === "deslizante" && <Deslizante p={p} onResponder={onResponder} bloqueado={bloqueado} />}
       {p.tipo === "pin" && <Pin p={p} onResponder={onResponder} bloqueado={bloqueado} />}
       {p.tipo === "puzzle" && <Puzzle p={p} onResponder={onResponder} bloqueado={bloqueado} />}

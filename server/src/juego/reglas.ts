@@ -55,7 +55,8 @@ export function vistaAnfitrion(p: PreguntaEntrada) {
 
 /** Lo que ve el jugador en el celular */
 export function vistaJugador(p: PreguntaEntrada, orden: number[]) {
-  const base = { tipo: p.tipo, enunciado: p.enunciado, tiempo: p.tiempo, puntosDobles: p.puntosDobles };
+  // El celular muestra el enunciado y la imagen (además de las opciones)
+  const base = { tipo: p.tipo, enunciado: p.enunciado, imagen: p.imagen, tiempo: p.tiempo, puntosDobles: p.puntosDobles };
   switch (p.tipo) {
     case "quiz":
       return { ...base, opciones: datos(p, "quiz").opciones.map((o) => o.texto) };
