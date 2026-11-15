@@ -1,6 +1,7 @@
 # ArcoHoot
 
 Quizzes en vivo. `client/` (React + Vite + TS) · `server/` (Express + Socket.IO + Prisma + MySQL).
+Son dos proyectos independientes (cada uno con su `node_modules`); `npm install` en la raíz instala ambos.
 El diseño de referencia está en `pantallas/` y los tokens en `estilos/tokens.css` (el cliente los importa desde ahí).
 
 ## Arrancar
@@ -12,7 +13,7 @@ Necesitas un MySQL/MariaDB (XAMPP, Laragon o la base de Hostinger por MySQL remo
 npm install          # instala client y server (workspaces)
 npm run db:setup     # crea las tablas en MySQL y carga datos de ejemplo
 npm run dev          # API en :3001 y web en http://localhost:5173
-npm run pruebas      # pruebas automáticas (con npm run dev corriendo; ver DESPLIEGUE-HOSTINGER.md)
+npm run pruebas      # pruebas automáticas (con npm run dev corriendo)
 ```
 
 Para publicar en Hostinger: **[DESPLIEGUE-HOSTINGER.md](DESPLIEGUE-HOSTINGER.md)**.

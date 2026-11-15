@@ -24,10 +24,10 @@ Anota el nombre de la base, el usuario y la contraseña.
 
 Las tablas se pueden crear de dos formas (elige una):
 
-- **A · Automática:** no hagas nada; el build (`npm run build:produccion`) las crea con `prisma migrate deploy`.
+- **A · Desde tu PC:** con la conexión remota en `server/.env`, ejecuta `npm run db:migrar`.
 - **B · A mano con phpMyAdmin:** junto a la base pulsa **Entrar a phpMyAdmin**, selecciona la base,
   pestaña **Importar** y sube [`server/prisma/hostinger/arcohoot-tablas.sql`](server/prisma/hostinger/arcohoot-tablas.sql).
-  El script registra la migración, así el build después no intenta crearlas de nuevo.
+  El script registra la migración, así `npm run db:migrar` después no intenta crearlas de nuevo.
   Si algún día cambias el esquema, regenera el script con `node server/prisma/hostinger/generar-sql.mjs`.
 
 ## 2. Subir el código
@@ -42,13 +42,23 @@ hPanel → **Sitios web → Crear sitio → Web App** (o **Node.js**). Elige tu 
 |---|---|
 | Framework preset | Other / Express |
 | Node version | 22.x |
-| Root directory | `/` (la raíz del proyecto) |
+| Root directory | **`server`** |
 | Package manager | npm |
-| Build command | `npm run build:produccion` |
-| Entry file | `server/app.cjs` (o `app.cjs` si el directorio raíz es `server`) |
+| Build command | `npm run build` |
+| Entry file | **`app.cjs`** |
 
-`build:produccion` genera el cliente de Prisma, compila servidor y web, y crea las tablas en MySQL
-(`prisma migrate deploy`).
+La carpeta `server/` es autosuficiente: tiene sus propias librerías y su `npm run build` genera Prisma,
+compila la API y **también compila la web** (`../client`) y la copia a `server/public`. Hostinger publica
+solo `server/`, y ese único proceso entrega la web, la API y el juego en vivo.
+
+`app.cjs` es el arranque: Hostinger carga la app con `require()` y en Node 20 eso no puede cargar
+el servidor compilado (módulo ES); `app.cjs` lo resuelve.
+
+Las tablas no se crean en el build: impórtalas con el script de phpMyAdmin (paso 1, opción B)
+o ejecuta `npm run db:migrar` desde tu PC con la conexión remota.
+
+Comprueba el resultado en `https://tudominio/api/salud`: debe decir `"ok":true` y `"baseDeDatos":"ok"`.
+Si `baseDeDatos` muestra un error, la app funciona pero no conecta con MySQL: revisa las variables.
 
 ## 3. Variables de entorno
 
