@@ -45,7 +45,7 @@ hPanel → **Sitios web → Crear sitio → Web App** (o **Node.js**). Elige tu 
 | Root directory | `/` (la raíz del proyecto) |
 | Package manager | npm |
 | Build command | `npm run build:produccion` |
-| Entry file | `server/dist/index.js` |
+| Entry file | `server/app.cjs` (o `app.cjs` si el directorio raíz es `server`) |
 
 `build:produccion` genera el cliente de Prisma, compila servidor y web, y crea las tablas en MySQL
 (`prisma migrate deploy`).
