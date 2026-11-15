@@ -18,6 +18,7 @@ import { ListaPreguntas } from "./ListaPreguntas";
 import { PanelPropiedades } from "./PanelPropiedades";
 import { useAutoguardado } from "./useAutoguardado";
 import { VistaPrevia } from "./VistaPrevia";
+import { ImportarPreguntas } from "./ImportarPreguntas";
 import { ZonaImagen } from "./ZonaImagen";
 import "./Editor.css";
 
@@ -41,6 +42,7 @@ export function Editor() {
   const [aviso, setAviso] = useState("");
   const [borrada, setBorrada] = useState<{ pregunta: Pregunta; indice: number } | null>(null);
   const [vista, setVista] = useState(false);
+  const [importando, setImportando] = useState(false);
   const [, refrescar] = useState(0);
   const enunciadoRef = useRef<HTMLTextAreaElement>(null);
 
@@ -135,6 +137,22 @@ export function Editor() {
     return () => clearTimeout(t);
   }, [aviso]);
 
+  function importar(nuevas: Pregunta[]) {
+    if (!preguntas || nuevas.length === 0) return;
+    // Un quiz recién creado solo tiene una pregunta vacía: se reemplaza en vez de dejarla al principio
+    const soloVacia = preguntas.length === 1 && !preguntas[0].enunciado.trim();
+    const base = soloVacia ? [] : preguntas;
+    setPreguntas([...base, ...nuevas]);
+    setSel(base.length);
+    cambio();
+    setImportando(false);
+    const revisar = nuevas.filter((p) => problemas(p).length > 0).length;
+    setAviso(
+      `Se ${nuevas.length === 1 ? "agregó 1 pregunta" : `agregaron ${nuevas.length} preguntas`}.` +
+        (revisar ? ` ${revisar} necesita${revisar === 1 ? "" : "n"} revisión (marcadas con «!»).` : ""),
+    );
+  }
+
   function mover(desde: number, hasta: number) {
     if (!preguntas) return;
     const n = [...preguntas];
@@ -216,6 +234,9 @@ export function Editor() {
           {textoEstado}
         </span>
         <div style={{ flex: 1 }} />
+        <Boton tamano="sm" icono={<Icono nombre="importar" tamano={20} />} onClick={() => setImportando(true)}>
+          Importar
+        </Boton>
         <Boton tamano="sm" icono={<Icono nombre="ojo" tamano={20} />} onClick={() => setVista(true)}>
           Vista previa
         </Boton>
@@ -302,6 +323,7 @@ export function Editor() {
         )}
       </div>
 
+      {importando && <ImportarPreguntas onImportar={importar} onCerrar={() => setImportando(false)} />}
       {vista && <VistaPrevia preguntas={preguntas} indice={sel} onIndice={setSel} onCerrar={() => setVista(false)} />}
     </div>
   );

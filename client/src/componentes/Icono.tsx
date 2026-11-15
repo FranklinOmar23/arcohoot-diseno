@@ -14,6 +14,7 @@ export type NombreIcono =
   | "atras"
   | "adelante"
   | "copiar"
+  | "importar"
   | "candado"
   | "candado-abierto"
   | "subir"
@@ -67,6 +68,7 @@ const trazos: Record<NombreIcono, JSX.Element> = {
       <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
     </>
   ),
+  importar: <path d="M12 15V4M7 9l5-5 5 5M5 20h14" />,
   candado: (
     <>
       <rect x="5" y="10" width="14" height="10" rx="2" />
