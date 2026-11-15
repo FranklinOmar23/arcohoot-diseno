@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jugador · Respuesta corta</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.ah-root{font-family:"Nunito",system-ui,sans-serif;color:#1e1b3a;background:#fff7ec;position:relative;overflow:hidden}
+.f{font-family:"Fredoka","Nunito",system-ui,sans-serif}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.lbl{font-weight:900;font-size:12px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase;color:#5b5675}
+.meta{font-weight:700;font-size:14px;line-height:1.4;color:#5b5675}
+h1,h2,h3,p{margin:0}
+.btn{font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:600;font-size:20px;line-height:1;height:56px;padding:0 26px;border:3px solid #1e1b3a;border-radius:999px;box-shadow:0 5px 0 #1e1b3a;background:#fff;color:#1e1b3a;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:transform .12s,box-shadow .12s;text-decoration:none;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn:active,.btn.is-down{transform:translateY(5px);box-shadow:0 0 0 #1e1b3a}
+.btn:focus-visible,.op:focus-visible,.field:focus,.tile:focus-visible{outline:none;box-shadow:0 0 0 4px #fff7ec,0 0 0 8px #3b2fc9}
+.btn-arco{background:#ff5a36}.btn-sol{background:#ffc21a}.btn-anil{background:#3b2fc9;color:#fff}
+.btn-lg{height:72px;font-size:24px;padding:0 34px}
+.btn-sm{height:46px;font-size:18px;padding:0 20px;box-shadow:0 4px 0 #1e1b3a}
+.btn-block{width:100%}
+.btn[disabled]{background:#ecdfcc;color:#5b5675;box-shadow:none;cursor:not-allowed;transform:none}
+.card{background:#fff;border:3px solid #1e1b3a;border-radius:28px;box-shadow:0 7px 0 #1e1b3a}
+.panel{background:#fff;border:3px solid #1e1b3a;border-radius:28px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:3px solid #1e1b3a;border-radius:999px;background:#fff;color:#1e1b3a;font-weight:800;font-size:14px;white-space:nowrap}
+.chip-sol{background:#ffc21a}.chip-anil{background:#3b2fc9;color:#fff}.chip-laguna{background:#0c7d70;color:#fff}.chip-arco{background:#ff5a36}.chip-exito{background:#1e9e57}.chip-error{background:#d6303a;color:#fff}.chip-hielo{background:#bde8ff}
+.field{height:64px;border:3px solid #1e1b3a;border-radius:18px;background:#fff;padding:0 20px;font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:600;font-size:24px;color:#1e1b3a;width:100%;outline:none}
+.field::placeholder{color:#5b5675}
+.op{display:flex;align-items:center;gap:16px;border:3px solid #1e1b3a;border-radius:18px;box-shadow:0 5px 0 #1e1b3a;padding:0 22px;font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:600;font-size:24px;line-height:1.2;text-align:left;cursor:pointer;color:#1e1b3a;transition:transform .12s,box-shadow .12s;position:relative}
+.op:active{transform:translateY(5px);box-shadow:0 0 0 #1e1b3a}
+.op svg{flex:none}
+.op-tri{background:#ffc21a}.op-rom{background:#ff5a36}.op-cir{background:#0c7d70;color:#fff}.op-cua{background:#3b2fc9;color:#fff}
+.opv{flex-direction:column;justify-content:center;text-align:center;gap:14px;padding:12px}
+.pow{width:64px;height:64px;border-radius:50%;background:#fff;border:4px solid #6b7080;display:flex;align-items:center;justify-content:center;font-size:30px;line-height:1;box-shadow:0 4px 0 #1e1b3a;position:relative;flex:none}
+.pow-comun{border-color:#6b7080}.pow-raro{border-color:#1f6fd1}.pow-epico{border-color:#9333c9}
+.rar{font-weight:900;font-size:12px;line-height:1;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:5px 9px;border-radius:999px;display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+.rar-comun{background:#6b7080}.rar-raro{background:#1f6fd1}.rar-epico{background:#9333c9}
+.av{width:44px;height:44px;border-radius:50%;border:3px solid #1e1b3a;display:flex;align-items:center;justify-content:center;font-family:"Fredoka","Nunito",system-ui,sans-serif;font-weight:700;font-size:20px;flex:none}
+.toggle{width:62px;height:36px;border-radius:999px;border:3px solid #1e1b3a;background:#ecdfcc;position:relative;flex:none;cursor:pointer;padding:0}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;border:3px solid #1e1b3a;box-sizing:border-box;transition:left .15s}
+.toggle.on{background:#0c7d70}.toggle.on::after{left:29px}
+.tile{display:flex;align-items:center;gap:8px;border:3px solid #1e1b3a;border-radius:14px;background:#fff;padding:6px 10px;font-weight:800;font-size:14px;line-height:1.15;text-align:left;cursor:pointer;color:#1e1b3a;font-family:"Nunito",system-ui,sans-serif}
+.tile.sel{background:#3b2fc9;color:#fff}
+.ring{box-shadow:0 0 0 4px #fff7ec,0 0 0 8px #3b2fc9}
+@keyframes pop{0%{transform:scale(.3);opacity:0}65%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.grow{transform-origin:bottom;animation:grow .8s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes rise{from{transform:translateY(var(--from,40px));opacity:.3}to{transform:none;opacity:1}}
+.rise{animation:rise .9s cubic-bezier(.2,1.25,.4,1) both}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-12px) rotate(var(--r,0deg))}}
+.floaty{animation:floaty 3.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.pulse{animation:pulse .5s ease-in-out infinite}
+.pulse-slow{animation:pulse 1.6s ease-in-out infinite}
+@keyframes fall{from{transform:translateY(-80px) rotate(0)}to{transform:translateY(1000px) rotate(600deg)}}
+.conf{position:absolute;top:0;animation:fall 3.4s linear infinite}
+@keyframes slidein{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+.slidein{animation:slidein .45s ease-out both}
+@keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+.bounce{animation:bounce 1s ease-in-out infinite}
+@keyframes drop{0%{transform:translate(-50%,-160%);opacity:0}60%{transform:translate(-50%,-100%);opacity:1}78%{transform:translate(-50%,-112%)}100%{transform:translate(-50%,-100%)}}
+@keyframes shake{0%,100%{transform:rotate(var(--r,0deg))}25%{transform:rotate(calc(var(--r,0deg) + 3deg))}75%{transform:rotate(calc(var(--r,0deg) - 3deg))}}
+.shake{animation:shake .4s ease-in-out 3 both}
+@keyframes ripple{from{transform:translate(-50%,-50%) scale(.3);opacity:.9}to{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.blink{animation:blink 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+html{background:#d9d2c5} body{display:flex;justify-content:center;padding:24px}</style>
+</head>
+<body>
+<div class="ah-root" style="width: 390px; height: 844px; flex: none; border-radius: 12px; font-family: Nunito, system-ui, sans-serif; color: #1e1b3a; background: #fff7ec; ">
+
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 12px; height: 100%">
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 50px; flex: none"><span class="chip">4 / 10</span><span style="position: relative"><span class="chip f" role="timer" aria-label="Quedan 17 segundos" style="height: 46px; font-size: 22px; font-weight: 700; background: #fff; padding: 0 16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> 17</span></span><span class="f" style="font-weight: 700; font-size: 18px">1 240 pts</span></header>
+  <p style="display: flex; align-items: center; gap: 8px; flex: none"><span class="lbl">Respuesta corta</span><span style="font-weight: 700; font-size: 15px; color: #5b5675">· Escribe tu respuesta</span></p>
+  <div class="card" style="padding: 18px 20px"><p class="f" style="font-weight: 600; font-size: 24px; line-height: 1.2">¿Qué número marcas en una emergencia?</p></div>
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px">
+    <label class="lbl" for="corta" style="color: #1e1b3a">Tu respuesta</label>
+    <input id="corta" class="field" value="911" readonly="" style="height: 84px; font-size: 40px; box-shadow: 0 0 0 4px #fff7ec, 0 0 0 8px #3b2fc9">
+    <div style="display: flex; justify-content: space-between"><span class="meta">No importan mayúsculas ni tildes</span><span class="meta">3 / 20</span></div>
+  </div>
+  <div style="margin-top: auto"><button class="btn btn-arco btn-lg btn-block">Enviar <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+</div>
+
+</div>
+</body>
+</html>

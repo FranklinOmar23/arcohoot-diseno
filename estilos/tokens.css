@@ -1,0 +1,59 @@
+/* ArcoHoot — tokens de diseño (tema Claro por defecto, Oscuro con [data-theme="oscuro"]) */
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap");
+
+:root {
+  /* Base */
+  --crema: #fff7ec;        /* fondo de toda pantalla */
+  --papel: #ffffff;        /* tarjetas, campos, PIN */
+  --tinta: #1e1b3a;        /* texto principal */
+  --tinta-suave: #5b5675;  /* texto secundario (≥4.5:1) */
+  --linea: #ecdfcc;        /* separadores, pistas */
+  --borde: #1e1b3a;        /* contorno grueso de 3px */
+  --sombra: #1e1b3a;       /* sombra sólida */
+
+  /* Marca y respuestas (no cambian con el tema) */
+  --arco: #ff5a36;   /* marca · opción ROMBO */
+  --sol: #ffc21a;    /* energía · opción TRIÁNGULO · Puntos dobles */
+  --laguna: #0c7d70; /* opción CÍRCULO */
+  --anil: #3b2fc9;   /* opción CUADRADO · foco · selección */
+  --op-triangulo: var(--sol);
+  --op-rombo: var(--arco);
+  --op-circulo: var(--laguna);
+  --op-cuadrado: var(--anil);
+  --sobre-claro: #1e1b3a;  /* texto sobre sol, arco, éxito, hielo */
+  --sobre-oscuro: #ffffff; /* texto sobre laguna, añil, error, rarezas */
+
+  /* Estados y efectos */
+  --exito: #1e9e57;
+  --error: #d6303a;
+  --hielo: #bde8ff;
+  --niebla: #cfcbe3;
+
+  /* Rareza de poderes */
+  --rareza-comun: #6b7080;
+  --rareza-raro: #1f6fd1;
+  --rareza-epico: #9333c9;
+
+  /* Tipografía */
+  --font-display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --font-sans: "Nunito", system-ui, sans-serif;
+  --fs-pin: 120px; --fs-display: 64px; --fs-pregunta: 40px; --fs-titulo: 32px;
+  --fs-opcion: 24px; --fs-boton: 20px; --fs-cuerpo: 18px; --fs-pequeno: 14px; --fs-etiqueta: 12px;
+
+  /* Espaciado, radios, sombras */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-12: 48px;
+  --radius-sm: 10px; --radius-md: 18px; --radius-lg: 28px; --radius-pill: 999px;
+  --sombra-boton: 0 5px 0 var(--sombra);
+  --sombra-tarjeta: 0 7px 0 var(--sombra);
+  --borde-grueso: 3px solid var(--borde);
+}
+
+[data-theme="oscuro"] {
+  --crema: #15132b; --papel: #221f40; --tinta: #f7f2ff; --tinta-suave: #b9b3d6;
+  --linea: #34305a; --borde: #8f87c9; --sombra: #05040f; --arco: #ff6b4a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

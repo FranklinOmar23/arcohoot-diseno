@@ -1,0 +1,138 @@
+/* H1 · Inicio del anfitrión — medidas tomadas de pantallas/H1_Inicio.html */
+.inicio {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+.inicio__espacio { flex: 1; }
+
+/* Barra superior */
+.inicio__barra { display: flex; align-items: center; gap: 18px; min-height: 56px; }
+.inicio__buscar { flex: 0 1 420px; min-width: 0; }
+
+/* Título + filtros */
+.inicio__titulo { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.inicio__titulo h1 { font-weight: 600; font-size: var(--fs-titulo); margin-right: 12px; }
+.inicio__filtros { display: flex; gap: 12px; flex-wrap: wrap; }
+.inicio__orden { display: inline-flex; align-items: center; gap: 4px; }
+.inicio__orden select {
+  border: none;
+  background: transparent;
+  font-weight: 800;
+  font-size: var(--fs-pequeno);
+  color: var(--tinta);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+.inicio__orden select:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+
+.inicio__error {
+  border: var(--borde-grueso);
+  border-radius: var(--radius-md);
+  background: var(--error);
+  color: var(--sobre-oscuro);
+  font-weight: 800;
+  padding: 12px 18px;
+}
+
+/* Rejilla: 4 columnas a 1280 px, filas de 262 px */
+.inicio__rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-auto-rows: 262px;
+  gap: 22px 20px;
+}
+
+/* Tarjeta de quiz */
+.tarjeta-quiz { overflow: hidden; display: flex; flex-direction: column; border-radius: 24px; position: relative; }
+.tarjeta-quiz__portada { height: 104px; border-bottom: var(--borde-grueso); position: relative; overflow: hidden; flex: none; }
+.tarjeta-quiz__figura { position: absolute; display: flex; }
+.tarjeta-quiz__cuerpo { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.tarjeta-quiz__titulo { font-weight: 600; font-size: 20px; line-height: 1.15; }
+.tarjeta-quiz__enlace { color: inherit; text-decoration: none; border-radius: 6px; }
+.tarjeta-quiz__enlace:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.tarjeta-quiz__enlace:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+.tarjeta-quiz__pie { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.ah-btn.tarjeta-quiz__jugar { width: 40px; height: 40px; }
+
+/* Tile "Crear quiz nuevo" */
+.inicio__crear {
+  border: 3px dashed var(--borde);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--tinta);
+  background: var(--crema);
+  cursor: pointer;
+  padding: 16px;
+}
+.inicio__crear:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+.inicio__crear:hover .inicio__crear-icono { transform: translateY(-1px); }
+.inicio__crear:active .inicio__crear-icono { transform: translateY(5px); box-shadow: 0 0 0 var(--sombra); }
+.inicio__crear:disabled { cursor: wait; opacity: .7; }
+.inicio__crear-icono {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--arco);
+  color: var(--sobre-claro);
+  border: var(--borde-grueso);
+  box-shadow: var(--sombra-boton);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .12s, box-shadow .12s;
+}
+.inicio__crear-texto { font-weight: 600; font-size: 20px; }
+
+.inicio__vacio {
+  grid-column: 1 / -1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Menú de perfil */
+.menu-perfil { position: relative; }
+.menu-perfil__boton { cursor: pointer; padding: 0; }
+.menu-perfil__boton:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+.menu-perfil__panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  width: 280px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10;
+  border-radius: 22px;
+  transform-origin: top right;
+}
+.menu-perfil__nombre { font-weight: 600; font-size: 20px; line-height: 1.2; }
+.menu-perfil__panel .meta { overflow-wrap: anywhere; }
+
+/* Pantallas pequeñas: el buscador baja a su propia fila */
+@media (max-width: 760px) {
+  .inicio { padding: 20px 16px; }
+  .inicio__barra { flex-wrap: wrap; gap: 12px; }
+  .inicio__barra .inicio__espacio { display: none; }
+  .inicio__barra > .ah-logo { margin-right: auto; }
+  .inicio__buscar { order: 3; flex: 1 1 100%; }
+  .inicio__titulo .inicio__espacio { display: none; }
+  .inicio__filtros { overflow-x: auto; flex-wrap: nowrap; padding: 4px 2px 8px; width: 100%; }
+}

@@ -1,0 +1,100 @@
+/* H4 · Sala de espera — medidas tomadas de pantallas/H4_Sala.html */
+.sala { display: flex; flex-direction: column; min-height: 100vh; }
+.sala--centro { align-items: center; justify-content: center; padding: 24px; }
+.sala__error { padding: 32px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; max-width: 640px; }
+.sala__error > .f { font-size: 24px; font-weight: 600; }
+
+/* Banda añil */
+.sala__banda {
+  background: var(--anil);
+  border-bottom: var(--borde-grueso);
+  padding: 22px 32px 28px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  color: var(--sobre-oscuro);
+}
+.sala__instrucciones { display: flex; flex-direction: column; gap: 14px; width: 300px; flex: none; }
+.sala__titulo-instr { font-weight: 600; font-size: 30px; line-height: 1.15; }
+.sala__sub-instr { font-weight: 700; font-size: 16px; display: flex; flex-direction: column; gap: 4px; }
+.sala__url { font-weight: 900; font-size: var(--fs-pequeno); color: var(--hielo); overflow-wrap: anywhere; }
+.sala__pin { flex: 1; padding: 14px 32px 18px; color: var(--tinta); display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.lbl.sala__pin-lbl { color: var(--tinta); font-size: var(--fs-pequeno); }
+.sala__pin-num { font-weight: 700; font-size: var(--fs-pin); line-height: 1; letter-spacing: .04em; white-space: nowrap; }
+.sala__qr { padding: 12px; border-radius: 22px; flex: none; display: flex; }
+
+/* Cuerpo */
+.sala__cuerpo { padding: 22px 32px 26px; display: flex; flex-direction: column; gap: 20px; flex: 1; }
+.sala__fila { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.sala__contador { display: inline-flex; align-items: center; gap: 12px; }
+.sala__contador-icono {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--sol);
+  color: var(--sobre-claro);
+  border: var(--borde-grueso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sala__contador-num { font-weight: 700; font-size: 48px; line-height: 1; display: inline-block; }
+.sala__contador-txt { font-weight: 600; font-size: var(--fs-opcion); margin-right: 8px; }
+.sala__aviso { font-weight: 800; color: var(--error); }
+
+.sala__jugadores { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 12px; align-content: flex-start; }
+.sala__jugador {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 54px;
+  padding: 0 20px 0 6px;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-pill);
+  background: var(--papel);
+  box-shadow: 0 4px 0 var(--sombra);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  position: relative;
+}
+.sala__jugador--fuera { opacity: .45; }
+.sala__expulsar {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--borde);
+  background: var(--error);
+  color: var(--sobre-oscuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0;
+  transition: opacity .12s;
+}
+.sala__jugador:hover .sala__expulsar,
+.sala__expulsar:focus-visible { opacity: 1; }
+.sala__expulsar:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+.sala__esperando {
+  display: inline-flex;
+  align-items: center;
+  height: 54px;
+  padding: 0 20px;
+  border: 3px dashed var(--tinta-suave);
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 1000px) {
+  .sala__banda { flex-wrap: wrap; padding: 20px 16px; gap: 20px; }
+  .sala__instrucciones { width: 100%; }
+  .sala__pin-num { font-size: 72px; }
+  .sala__cuerpo { padding: 20px 16px; }
+}

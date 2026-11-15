@@ -1,0 +1,2 @@
+.ah-card { background: var(--papel); border: var(--borde-grueso); border-radius: var(--radius-lg); box-shadow: var(--sombra-tarjeta); }
+.ah-panel { background: var(--papel); border: var(--borde-grueso); border-radius: var(--radius-lg); }

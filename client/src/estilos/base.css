@@ -1,0 +1,53 @@
+/* Estilos globales de ArcoHoot. Los valores de color salen siempre de estilos/tokens.css */
+:root {
+  --anillo-foco: 0 0 0 4px var(--crema), 0 0 0 8px var(--anil);
+  color-scheme: light;
+}
+[data-theme="oscuro"] { color-scheme: dark; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--font-sans);
+  color: var(--tinta);
+  background: var(--crema);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* Utilidades del sistema de diseño */
+.f { font-family: var(--font-display); }
+.sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.lbl {
+  font-weight: 900; font-size: var(--fs-etiqueta); line-height: 1.2;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-suave);
+}
+.meta { font-weight: 700; font-size: var(--fs-pequeno); line-height: 1.4; color: var(--tinta-suave); }
+
+/* Animaciones (cortas y alegres; tokens.css las apaga con prefers-reduced-motion) */
+@keyframes pop { 0% { transform: scale(.3); opacity: 0 } 65% { transform: scale(1.12); opacity: 1 } 100% { transform: scale(1); opacity: 1 } }
+.pop { animation: pop .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes grow { from { transform: scaleY(0) } to { transform: scaleY(1) } }
+.grow { transform-origin: bottom; animation: grow .8s cubic-bezier(.2, 1.2, .4, 1) both; }
+@keyframes rise { from { transform: translateY(var(--from, 40px)); opacity: .3 } to { transform: none; opacity: 1 } }
+.rise { animation: rise .9s cubic-bezier(.2, 1.25, .4, 1) both; }
+@keyframes floaty { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)) } 50% { transform: translateY(-12px) rotate(var(--r, 0deg)) } }
+.floaty { animation: floaty 3.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { transform: scale(1) } 50% { transform: scale(1.07) } }
+.pulse { animation: pulse .5s ease-in-out infinite; }
+.pulse-slow { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes slidein { from { transform: translateX(40px); opacity: 0 } to { transform: none; opacity: 1 } }
+.slidein { animation: slidein .45s ease-out both; }
+@keyframes bounce { 0%, 100% { transform: translateY(0) } 40% { transform: translateY(-14px) } }
+.bounce { animation: bounce 1s ease-in-out infinite; }
+@keyframes shake { 0%, 100% { transform: rotate(var(--r, 0deg)) } 25% { transform: rotate(calc(var(--r, 0deg) + 3deg)) } 75% { transform: rotate(calc(var(--r, 0deg) - 3deg)) } }
+.shake { animation: shake .4s ease-in-out 3 both; }
+@keyframes fall { from { transform: translateY(-80px) rotate(0) } to { transform: translateY(110vh) rotate(600deg) } }
+.conf { position: absolute; top: 0; animation: fall 3.4s linear infinite; }
+@keyframes blink { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
+.blink { animation: blink 1.2s ease-in-out infinite; }

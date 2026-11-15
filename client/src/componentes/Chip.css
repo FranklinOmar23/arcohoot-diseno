@@ -1,0 +1,26 @@
+.ah-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-pill);
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: var(--fs-pequeno);
+  white-space: nowrap;
+}
+.ah-chip--sol { background: var(--sol); color: var(--sobre-claro); }
+.ah-chip--anil { background: var(--anil); color: var(--sobre-oscuro); }
+.ah-chip--laguna { background: var(--laguna); color: var(--sobre-oscuro); }
+.ah-chip--arco { background: var(--arco); color: var(--sobre-claro); }
+.ah-chip--exito { background: var(--exito); color: var(--sobre-claro); }
+.ah-chip--error { background: var(--error); color: var(--sobre-oscuro); }
+.ah-chip--hielo { background: var(--hielo); color: var(--sobre-claro); }
+
+.ah-chip--boton { cursor: pointer; transition: transform .12s; }
+.ah-chip--boton:hover { transform: translateY(-1px); }
+.ah-chip--boton:focus-visible { outline: none; box-shadow: var(--anillo-foco); }

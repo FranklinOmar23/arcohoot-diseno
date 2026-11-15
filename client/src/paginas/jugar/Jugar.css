@@ -1,0 +1,73 @@
+/* J1–J3 · Jugador en el celular — medidas tomadas de pantallas/J1, J2 y J3 (390 × 844) */
+.jugar {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+.jugar__columna {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.jugar__columna--centro { align-items: center; gap: 28px; }
+
+/* J1 */
+.jugar__marca { margin-top: 80px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.jugar__tarjeta { width: 100%; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.jugar__form { display: flex; flex-direction: column; gap: 16px; }
+.jugar__pin-lbl { font-weight: 600; font-size: var(--fs-opcion); text-align: center; }
+.ah-campo__input.jugar__pin { height: 80px; font-size: var(--fs-pregunta); text-align: center; letter-spacing: .1em; }
+.jugar__error {
+  border: var(--borde-grueso);
+  border-radius: var(--radius-md);
+  background: var(--error);
+  color: var(--sobre-oscuro);
+  font-weight: 800;
+  font-size: var(--fs-pequeno);
+  line-height: 1.4;
+  padding: 10px 14px;
+}
+
+/* J2 */
+.jugar__cabecera { display: flex; justify-content: space-between; align-items: center; }
+.jugar__intro { margin-top: 60px; display: flex; flex-direction: column; gap: 8px; }
+.jugar__intro h1 { font-weight: 700; font-size: var(--fs-pregunta); line-height: 1.1; }
+.jugar__intro p { font-weight: 600; font-size: 17px; line-height: 1.45; color: var(--tinta-suave); }
+.jugar__tarjeta--apodo { padding: 22px; gap: 14px; }
+.lbl.jugar__apodo-lbl { color: var(--tinta); }
+.ah-campo__input.jugar__apodo { height: 72px; font-size: var(--fs-titulo); }
+.jugar__apodo-pie { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.jugar__abajo { margin-top: auto; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.jugar__enlace {
+  border: 0;
+  background: transparent;
+  color: var(--tinta-suave);
+  font-weight: 800;
+  font-size: var(--fs-pequeno);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 8px 12px;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+}
+.jugar__enlace:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+
+/* J3 */
+.jugar__dentro { justify-content: center; text-align: center; gap: 22px; }
+.jugar__dentro-titulo { font-weight: 700; font-size: 48px; line-height: 1.05; }
+.jugar__yo { padding: 22px 28px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.jugar__yo-apodo { font-weight: 700; font-size: var(--fs-pregunta); line-height: 1; overflow-wrap: anywhere; }
+.jugar__dentro-texto { font-weight: 600; font-size: var(--fs-cuerpo); line-height: 1.45; max-width: 280px; }
+.jugar__chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.jugar__rebote { display: flex; gap: 12px; margin-top: 16px; }
+.jugar__salir { position: absolute; bottom: 16px; }

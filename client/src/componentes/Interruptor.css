@@ -1,0 +1,28 @@
+.ah-toggle {
+  width: 62px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  border: var(--borde-grueso);
+  background: var(--linea);
+  position: relative;
+  flex: none;
+  cursor: pointer;
+  padding: 0;
+}
+.ah-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--papel);
+  border: var(--borde-grueso);
+  box-sizing: border-box;
+  transition: left .15s;
+}
+.ah-toggle--on { background: var(--laguna); }
+.ah-toggle--on::after { left: 29px; }
+.ah-toggle:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+.ah-toggle:disabled { cursor: not-allowed; opacity: .6; }

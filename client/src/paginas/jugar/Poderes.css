@@ -1,0 +1,221 @@
+/* P1–P9 · Modo con poderes en el celular — medidas tomadas de pantallas/P*.html */
+
+/* P1 · Inventario */
+.pod-barra {
+  flex: none;
+  margin: auto -20px -20px;
+  padding: 12px 20px 16px;
+  background: var(--papel);
+  border-top: var(--borde-grueso);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+}
+.pod-barra__ayuda { text-align: center; color: var(--tinta); }
+.pod-barra__lista { list-style: none; margin: 0; padding: 0; display: flex; gap: 10px; }
+.pod-barra__lista > li { flex: 1; }
+.pod-ranura {
+  background: var(--papel);
+  color: var(--tinta);
+  width: 100%;
+  height: 92px;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-md);
+  box-shadow: var(--sombra-boton);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  padding: 4px;
+  transition: transform .12s, box-shadow .12s;
+}
+.pod-ranura:active { transform: translateY(5px); box-shadow: 0 0 0 var(--sombra); }
+.pod-ranura:focus-visible { outline: none; box-shadow: var(--sombra-boton), var(--anillo-foco); }
+.pod-ranura:disabled { opacity: .5; cursor: not-allowed; }
+.pod-ranura .ah-pow { box-shadow: none; }
+.pod-ranura--sel { background: var(--anil); color: var(--sobre-oscuro); box-shadow: var(--sombra-boton), var(--anillo-foco); }
+.pod-ranura--vacia { border-style: dashed; border-color: var(--tinta-suave); box-shadow: none; background: var(--crema); cursor: default; }
+.pod-ranura__nombre { font-weight: 900; font-size: 13px; line-height: 1; text-align: center; }
+.pod-ranura__gemas { font-size: 10px; line-height: 1; }
+
+/* P3 · Selector de objetivo (cubre la pantalla) */
+.pod-objetivo {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: var(--crema);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.pod-objetivo__cabecera { display: flex; justify-content: space-between; align-items: center; }
+.pod-objetivo__titulo { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+.pod-objetivo__titulo h1 { font-weight: 700; font-size: 30px; line-height: 1.1; }
+.pod-objetivo__lista { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.pod-objetivo__vacio { font-size: 22px; font-weight: 600; color: var(--tinta-suave); text-align: center; padding: 24px; }
+.pod-objetivo__abajo { margin-top: auto; padding-top: 8px; }
+.pod-rival {
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: var(--sombra-boton);
+  width: 100%;
+  height: 70px;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+.pod-rival:focus-visible { outline: none; box-shadow: var(--sombra-boton), var(--anillo-foco); }
+.pod-rival--sel { background: var(--anil); color: var(--sobre-oscuro); box-shadow: var(--sombra-boton), 0 0 0 4px var(--crema), 0 0 0 8px var(--anil); }
+.pod-rival--protegido { border-style: dashed; border-color: var(--tinta-suave); background: var(--linea); box-shadow: none; cursor: not-allowed; }
+.pod-rival--protegido .pod-rival__puesto { color: var(--tinta-suave); }
+.pod-rival__puesto { font-weight: 700; font-size: 18px; width: 34px; text-align: left; }
+.pod-rival__apodo { font-weight: 600; font-size: 22px; flex: 1; text-align: left; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pod-rival__puntos { font-weight: 900; font-size: 16px; white-space: nowrap; }
+
+/* P2 · ¡Ganaste un poder! */
+.pod-ganaste { min-height: 100vh; min-height: 100dvh; background: var(--tinta); color: var(--sobre-oscuro); display: flex; justify-content: center; }
+[data-theme="oscuro"] .pod-ganaste { background: var(--sombra); }
+.pod-ganaste__columna {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.pod-ganaste__titulo { font-weight: 700; font-size: var(--fs-pregunta); line-height: 1.05; text-align: center; margin-top: 18px; }
+.pod-ganaste__motivo { font-weight: 700; font-size: 16px; color: var(--hielo); }
+.pod-ruleta {
+  position: relative;
+  width: 330px;
+  max-width: 100%;
+  height: 104px;
+  background: var(--papel);
+  border: var(--borde-grueso);
+  border-radius: 24px;
+  overflow: hidden;
+  flex: none;
+}
+.pod-ruleta__tira { display: flex; gap: 12px; padding: 17px 16px; animation: ruleta 2.4s cubic-bezier(.12, .75, .2, 1) both; }
+.pod-ruleta__tira .ah-pow { box-shadow: none; }
+@keyframes ruleta { from { transform: translateX(0) } to { transform: translateX(-719px) } }
+@media (prefers-reduced-motion: reduce) { .pod-ruleta__tira { transform: translateX(-719px); } }
+.pod-ruleta__marco { position: absolute; left: 50%; top: 6px; bottom: 6px; width: 82px; transform: translateX(-50%); border: 4px solid var(--sol); border-radius: 20px; }
+.pod-ganaste__tarjeta { width: 100%; padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--tinta); text-align: center; min-height: 290px; }
+.pod-ganaste__tarjeta--espera { visibility: hidden; }
+.pod-ganaste__tarjeta h2 { font-weight: 700; font-size: 34px; line-height: 1; }
+.pod-ganaste__desc { font-weight: 600; font-size: 17px; line-height: 1.4; }
+.pod-ganaste__botones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: 100%; margin-top: auto; }
+.pod-ganaste__botones .ah-btn { padding: 0; }
+.pod-ganaste__nota { color: var(--hielo); text-align: center; margin-top: -10px; }
+
+/* P4 · Congelado */
+.pod-hielo {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  background: color-mix(in srgb, var(--hielo) 82%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: congelar .4s ease-out both;
+}
+@keyframes congelar { from { opacity: 0; transform: scale(1.08) } to { opacity: 1; transform: none } }
+.pod-hielo__grietas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .95; }
+.pod-hielo__tarjeta { position: relative; padding: 26px 24px; width: 300px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.pod-hielo__emoji { font-size: 64px; line-height: 1; }
+.pod-hielo__tarjeta h1 { font-weight: 700; font-size: 34px; line-height: 1.05; }
+.pod-hielo__de { font-weight: 700; font-size: 16px; }
+.pod-hielo__de b { font-weight: 900; }
+.pod-hielo__cuenta {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--hielo);
+  color: var(--sobre-claro);
+  border: var(--borde-grueso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 44px;
+  margin-top: 6px;
+}
+
+/* P5 · Niebla (sobre las opciones) */
+.pod-niebla { position: absolute; inset: -10px; overflow: hidden; border-radius: 20px; z-index: 2; pointer-events: none; transition: opacity .3s; }
+.pod-niebla__nube { position: absolute; border-radius: 50%; background: var(--niebla); filter: blur(22px); animation: deriva 5s ease-in-out infinite; }
+@keyframes deriva { 0%, 100% { transform: translate(0, 0) scale(1) } 50% { transform: translate(18px, -10px) scale(1.08) } }
+
+/* P6 · Revuelto: botones ladeados */
+.resp__op--revuelto:nth-child(1) { rotate: -4deg; }
+.resp__op--revuelto:nth-child(2) { rotate: 3deg; }
+.resp__op--revuelto:nth-child(3) { rotate: 5deg; }
+.resp__op--revuelto:nth-child(4) { rotate: -3deg; }
+
+/* 50/50 y segunda oportunidad: opción descartada */
+.ah-op.resp__op--fuera { background: var(--linea); color: var(--tinta-suave); box-shadow: none; border-style: dashed; opacity: .7; }
+
+/* P5–P9 · Banner */
+.pod-banner {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  box-shadow: var(--sombra-boton);
+}
+.pod-banner__emoji { font-size: 30px; line-height: 1; }
+.pod-banner__titulo { font-weight: 700; font-size: 20px; line-height: 1.1; }
+.pod-banner__texto { font-weight: 700; font-size: var(--fs-pequeno); line-height: 1.3; }
+
+/* P9 · +5 s junto al reloj */
+.resp__reloj-caja { position: relative; }
+.pod-extra {
+  position: absolute;
+  right: -40px;
+  top: -14px;
+  background: var(--exito);
+  color: var(--sobre-claro);
+  border: var(--borde-grueso);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 3px 0 var(--sombra);
+  white-space: nowrap;
+}
+
+/* H5 · Panel "Poderes en juego" */
+.juego--poderes { display: grid; grid-template-columns: minmax(0, 1fr) 286px; gap: 24px; }
+.juego__principal { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.feed { padding: 16px; display: flex; flex-direction: column; gap: 12px; border-radius: 24px; align-self: stretch; }
+.feed__cabecera { display: flex; align-items: center; gap: 8px; }
+.feed__punto { width: 12px; height: 12px; border-radius: 50%; background: var(--error); }
+.feed__lista { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.feed__item { display: flex; gap: 10px; align-items: center; padding: 10px; border-radius: 16px; background: var(--crema); border: 2px solid var(--linea); }
+.feed__item--nuevo { background: var(--hielo); border-color: var(--borde); color: var(--sobre-claro); }
+.feed__item .ah-pow { box-shadow: none; border-width: 3px; }
+.feed__texto { font-weight: 600; font-size: 16px; line-height: 1.3; }
+.feed__vacio { font-weight: 700; font-size: var(--fs-pequeno); color: var(--tinta-suave); }
+@media (max-width: 1100px) { .juego--poderes { grid-template-columns: minmax(0, 1fr); } }

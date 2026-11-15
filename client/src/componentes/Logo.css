@@ -1,0 +1,7 @@
+.ah-logo { display: inline-flex; align-items: center; gap: 10px; }
+.ah-logo--apilado { flex-direction: column; gap: 12px; }
+.ah-logo__texto { font-weight: 700; line-height: 1; color: var(--tinta); letter-spacing: -0.01em; }
+.ah-logo__hoot { color: var(--anil); }
+[data-theme="oscuro"] .ah-logo__hoot { color: var(--hielo); }
+.ah-logo--claro .ah-logo__texto { color: var(--sobre-oscuro); }
+.ah-logo--claro .ah-logo__hoot { color: var(--hielo); }

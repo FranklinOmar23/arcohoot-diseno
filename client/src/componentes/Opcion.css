@@ -1,0 +1,28 @@
+.ah-op {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-md);
+  box-shadow: var(--sombra-boton);
+  padding: 0 22px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-opcion);
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+  position: relative;
+}
+.ah-op:active { transform: translateY(5px); box-shadow: 0 0 0 var(--sombra); }
+.ah-op:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+.ah-op:disabled { cursor: default; }
+
+.ah-op--triangulo { background: var(--op-triangulo); color: var(--sobre-claro); }
+.ah-op--rombo { background: var(--op-rombo); color: var(--sobre-claro); }
+.ah-op--circulo { background: var(--op-circulo); color: var(--sobre-oscuro); }
+.ah-op--cuadrado { background: var(--op-cuadrado); color: var(--sobre-oscuro); }
+
+.ah-op--vertical { flex-direction: column; justify-content: center; text-align: center; gap: 14px; padding: 12px; }

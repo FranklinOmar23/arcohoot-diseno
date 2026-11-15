@@ -1,0 +1,49 @@
+/* Botón "pegatina": borde de 3 px, sombra sólida; al pulsar baja 5 px y la sombra desaparece */
+.ah-btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-boton);
+  line-height: 1;
+  height: 56px;
+  padding: 0 26px;
+  border: var(--borde-grueso);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--sombra-boton);
+  background: var(--papel);
+  color: var(--tinta);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+  text-decoration: none;
+  white-space: nowrap;
+  flex: none;
+}
+.ah-btn:hover { transform: translateY(-1px); }
+.ah-btn:active { transform: translateY(5px); box-shadow: 0 0 0 var(--sombra); }
+.ah-btn:focus-visible { outline: none; box-shadow: var(--anillo-foco); }
+
+.ah-btn--arco { background: var(--arco); color: var(--sobre-claro); }
+.ah-btn--sol { background: var(--sol); color: var(--sobre-claro); }
+.ah-btn--anil { background: var(--anil); color: var(--sobre-oscuro); }
+
+.ah-btn--lg { height: 72px; font-size: var(--fs-opcion); padding: 0 34px; }
+.ah-btn--sm { height: 46px; font-size: 18px; padding: 0 20px; box-shadow: 0 4px 0 var(--sombra); }
+.ah-btn--sm:active { transform: translateY(4px); box-shadow: 0 0 0 var(--sombra); }
+
+.ah-btn--bloque { width: 100%; }
+
+.ah-btn--icono { padding: 0; width: 56px; }
+.ah-btn--icono.ah-btn--sm { width: 46px; }
+.ah-btn--icono.ah-btn--lg { width: 72px; }
+
+.ah-btn:disabled,
+.ah-btn[aria-disabled="true"] {
+  background: var(--linea);
+  color: var(--tinta-suave);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}

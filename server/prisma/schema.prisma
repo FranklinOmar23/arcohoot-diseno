@@ -1,0 +1,125 @@
+// ArcoHoot — modelo de datos (MySQL / MariaDB, como en Hostinger)
+// En MySQL un String sin @db es VARCHAR(191): los textos que pueden ser más largos van como @db.Text o VarChar(n).
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        String    @id @default(cuid())
+  nombre    String
+  correo    String    @unique
+  claveHash String? // null si la cuenta se creó con Google
+  googleId  String?   @unique
+  foto      String?   @db.Text
+  creadoEn  DateTime  @default(now())
+  sesiones  Sesion[]
+  quizzes   Quiz[]
+  partidas  Partida[]
+}
+
+// Cada inicio de sesión queda guardado. La cookie lleva un token aleatorio; aquí solo su hash.
+model Sesion {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  agente    String?  @db.VarChar(255)
+  creadaEn  DateTime @default(now())
+  ultimoUso DateTime @default(now())
+  expiraEn  DateTime
+
+  @@index([usuarioId])
+}
+
+model Quiz {
+  id            String     @id @default(cuid())
+  titulo        String
+  descripcion   String?    @db.Text
+  portada       Int        @default(0) // índice de la paleta de portadas (0–5)
+  favorito      Boolean    @default(false)
+  vecesJugado   Int        @default(0)
+  creadoEn      DateTime   @default(now())
+  actualizadoEn DateTime   @updatedAt
+  autorId       String
+  autor         Usuario    @relation(fields: [autorId], references: [id], onDelete: Cascade)
+  preguntas     Pregunta[]
+  partidas      Partida[]
+
+  @@index([autorId])
+}
+
+// Una partida lanzada desde H3. El PIN es único mientras la partida no termine.
+model Partida {
+  id             String         @id @default(cuid())
+  pin            String         @unique
+  quizId         String
+  quiz           Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  anfitrionId    String
+  anfitrion      Usuario        @relation(fields: [anfitrionId], references: [id], onDelete: Cascade)
+  modo           String // clasico | poderes
+  apodosVisibles Boolean        @default(true)
+  estado         String         @default("sala") // sala | jugando | terminada
+  creadaEn       DateTime       @default(now())
+  terminadaEn    DateTime?
+  participantes  Participante[]
+
+  @@index([anfitrionId])
+}
+
+// Resultados de cada jugador al terminar la partida (para el podio y el Excel)
+model Participante {
+  id         String      @id @default(cuid())
+  partidaId  String
+  partida    Partida     @relation(fields: [partidaId], references: [id], onDelete: Cascade)
+  apodo      String
+  puntos     Int
+  puesto     Int
+  aciertos   Int
+  respuestas Respuesta[]
+
+  @@index([partidaId])
+}
+
+model Respuesta {
+  id             String       @id @default(cuid())
+  participanteId String
+  participante   Participante @relation(fields: [participanteId], references: [id], onDelete: Cascade)
+  pregunta       Int // índice de la pregunta en la partida (0…)
+  enunciado      String       @db.VarChar(255)
+  respuesta      String       @db.Text // texto legible de lo que respondió ("" si no respondió)
+  correcta       Boolean
+  puntos         Int
+  ms             Int? // tiempo que tardó en responder
+
+  @@index([participanteId])
+}
+
+// Imágenes subidas desde el editor. Van en la base de datos (y no en disco) porque en el
+// hosting Business de Hostinger la carpeta de la app se reemplaza en cada despliegue.
+model Imagen {
+  nombre   String   @id @db.VarChar(120) // p. ej. piso-mojado-3f9a1c2b4d5e.png
+  tipo     String   @db.VarChar(40) // image/png, image/jpeg…
+  datos    Bytes    @db.MediumBlob // hasta 16 MB (el editor limita a 4 MB)
+  autorId  String?
+  creadaEn DateTime @default(now())
+}
+
+model Pregunta {
+  id           String  @id @default(cuid())
+  quizId       String
+  quiz         Quiz    @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  orden        Int
+  tipo         String // quiz | verdadero_falso | respuesta_corta | deslizante | pin | puzzle
+  enunciado    String  @db.VarChar(255)
+  tiempo       Int     @default(20) // segundos
+  puntosDobles Boolean @default(false)
+  imagen       String? @db.VarChar(255)
+  datos        String  @db.Text // JSON con opciones y respuesta según el tipo
+
+  @@index([quizId])
+}
