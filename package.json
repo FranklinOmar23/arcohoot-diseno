@@ -1,17 +1,14 @@
 {
   "name": "arcohoot",
   "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "scripts": {
-    "dev": "concurrently -n api,web -c magenta,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
-    "db:setup": "npm run db:setup -w server",
-    "build": "npm run build -w server && npm run build -w client",
-    "start": "npm run start -w server",
-    "build:produccion": "npm run build && npm run db:migrar -w server",
-    "pruebas": "node pruebas/sala.mjs && node pruebas/partida.mjs && node pruebas/poderes.mjs"
+    "postinstall": "npm install --prefix server --no-audit --no-fund && npm install --prefix client --no-audit --no-fund",
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix server",
+    "start": "npm start --prefix server",
+    "db:setup": "npm run db:setup --prefix server",
+    "db:migrar": "npm run db:migrar --prefix server",
+    "pruebas": "npm run pruebas --prefix server"
   },
   "devDependencies": {
     "concurrently": "9.1.0"

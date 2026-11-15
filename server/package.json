@@ -3,14 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && node scripts/construir-web.mjs",
     "start": "node app.cjs",
     "db:migrar": "node scripts/prisma.mjs migrate deploy",
     "db:setup": "node scripts/prisma.mjs migrate deploy && npm run db:seed",
     "db:nueva-migracion": "node scripts/prisma.mjs migrate dev",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "node scripts/prisma.mjs studio"
+    "db:studio": "node scripts/prisma.mjs studio",
+    "build:api": "prisma generate && tsc",
+    "pruebas": "node pruebas/sala.mjs && node pruebas/partida.mjs && node pruebas/poderes.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.1.0",
@@ -30,7 +33,8 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "tsx": "4.21.0"
+    "tsx": "4.21.0",
+    "socket.io-client": "4.8.1"
   },
   "engines": {
     "node": ">=20"

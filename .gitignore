@@ -4,3 +4,6 @@ server/.env
 server/prisma/*.db
 server/prisma/*.db-journal
 
+
+# Web compilada dentro de server/ (la genera el build)
+server/public

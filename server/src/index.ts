@@ -12,6 +12,7 @@ import { rutasPartidas } from "./partidas.js";
 import { rutasSubidas } from "./subidas.js";
 import { rutasExcel } from "./excel.js";
 import { crearServidorJuego } from "./juego/sockets.js";
+import { estadoBaseDatos } from "./db.js";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -19,8 +20,8 @@ app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(cargarUsuario);
 
-app.get("/api/salud", (_req, res) => {
-  res.json({ ok: true });
+app.get("/api/salud", async (_req, res) => {
+  res.json({ ok: true, baseDeDatos: await estadoBaseDatos(), node: process.version });
 });
 
 // En desarrollo: IPs de la red local, para que el QR funcione desde un celular en la misma Wi-Fi
@@ -46,7 +47,9 @@ app.use("/api", (_req, res) => {
 });
 
 // En producción, el mismo servidor entrega el frontend compilado
-const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../client/dist");
+// server/public (copiada en el build) o, en desarrollo, client/dist
+const aqui = path.dirname(fileURLToPath(import.meta.url));
+const dist = [path.resolve(aqui, "../public"), path.resolve(aqui, "../../client/dist")].find((d) => fs.existsSync(d)) ?? "";
 if (fs.existsSync(dist)) {
   app.use(express.static(dist));
   app.get(/^(?!\/api|\/socket\.io).*/, (_req, res) => {
