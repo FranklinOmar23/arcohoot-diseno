@@ -1,8 +1,11 @@
 // Datos de ejemplo: un usuario demo y los 7 quizzes de la pantalla H1.
 // "Seguridad en el trabajo" lleva las preguntas reales de los diseños (H2, J4–J9).
+import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
+import { prepararUrlBaseDatos } from "../src/configDb.js";
 
+prepararUrlBaseDatos();
 const prisma = new PrismaClient();
 const DIA = 24 * 60 * 60 * 1000;
 const hace = (dias: number) => new Date(Date.now() - dias * DIA);

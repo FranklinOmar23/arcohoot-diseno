@@ -52,7 +52,21 @@ hPanel → **Sitios web → Crear sitio → Web App** (o **Node.js**). Elige tu 
 
 ## 3. Variables de entorno
 
-En la misma pantalla, en **Environment variables** (o **Importar .env**):
+En la misma pantalla, en **Environment variables** (o **Importar .env**).
+
+**Opción por partes** (más cómoda; la contraseña puede tener símbolos sin codificarlos):
+
+| Variable | Valor |
+|---|---|
+| `DATABASE_URL` | `127.0.0.1` (solo el host) |
+| `USUARIODB` | el usuario con prefijo, p. ej. `u810873479_arcohoot` |
+| `CLAVEDB` | la contraseña |
+| `NOMBREDB` | (opcional) el nombre de la base; si falta, se usa el del usuario |
+| `NODE_ENV` | `production` |
+
+No agregues `PORT`: Hostinger asigna el puerto a la app.
+
+**Opción con URL completa:**
 
 | Variable | Valor |
 |---|---|
